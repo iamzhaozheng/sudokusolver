@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">SudokuSolver</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="line1">Line 1: </string>
+    <string name="line2">Line 2: </string>
+    <string name="line3">Line 3: </string>
+    <string name="line4">Line 4: </string>
+    <string name="line5">Line 5: </string>
+    <string name="line6">Line 6: </string>
+    <string name="line7">Line 7: </string>
+    <string name="line8">Line 8: </string>
+    <string name="line9">Line 9: </string>
 </resources>

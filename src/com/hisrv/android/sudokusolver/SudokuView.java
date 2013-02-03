@@ -3,6 +3,7 @@ package com.hisrv.android.sudokusolver;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Paint.Align;
 import android.graphics.Paint.Style;
 import android.util.AttributeSet;
 import android.view.View;
@@ -13,19 +14,25 @@ public class SudokuView extends View {
 	private Paint mLinePaint, mTextPaint;
 	private int[][] mTable;
 	private int mBorder = 0, mStart = 0, mEnd = 0, mGridWidth;
+	private double mTextSizeRatio;
 	
 	public SudokuView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
+		mTable = new int[GRID_NUM][GRID_NUM];
+		mTextSizeRatio = 3f / 4;
+		initPaints();
+	}
+	
+	private void initPaints() {
 		mLinePaint = new Paint();
 		mLinePaint.setStyle(Style.FILL_AND_STROKE);
 		mTextPaint = new Paint();
-		mTable = new int[GRID_NUM][GRID_NUM];
+		mTextPaint.setTextAlign(Align.CENTER);
 	}
 	
 	public boolean setValue(int x, int y, int value) {
 		mTable[y][x] = value;
-		
 		return true;
 	}
 
@@ -37,11 +44,12 @@ public class SudokuView extends View {
 	}
 	
 	private void drawNumbers(Canvas canvas) {
+		mTextPaint.setTextSize((int)(mGridWidth * mTextSizeRatio));
 		for (int i = 0; i < GRID_NUM; i ++) {
 			for (int j = 0; j < GRID_NUM; j ++) {
 				if (mTable[i][j] >= 1 && mTable[i][j] <= 9) {
-					int x = mStart + j * mGridWidth;
-					int y = mStart + i * mGridWidth;
+					int x = mStart + j * mGridWidth + mGridWidth / 2;
+					int y = mStart + i * mGridWidth + (int)(mGridWidth * mTextSizeRatio);
 					canvas.drawText(String.valueOf(mTable[i][j]), x, y, mTextPaint);
 				}
 			}
