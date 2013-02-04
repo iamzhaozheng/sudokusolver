@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/layout_input" >
+
+    <TextView
+        android:id="@+id/label"
+        style="@style/label_input" />
+
+    <EditText
+        android:id="@+id/edit"
+        style="@style/edit_input" />
+
+</LinearLayout>
