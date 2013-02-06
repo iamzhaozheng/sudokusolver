@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ public class InputDialog extends Dialog {
 	private static final int CHECK_UNKNOWN = -2;
 	private LinearLayout mGroup;
 	private EditText[] mEditTexts = new EditText[SIZE];
-	
+
 	public InputDialog(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
@@ -27,20 +28,22 @@ public class InputDialog extends Dialog {
 		mGroup = (LinearLayout) findViewById(R.id.group);
 		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		for (int i = 0; i < SIZE; i ++) {
-			View v = inflater.inflate(R.layout.item_input, mGroup);
+			View v = inflater.inflate(R.layout.item_input, null);
 			TextView tv = (TextView) v.findViewById(R.id.label);
 			tv.setText(context.getString(R.string.line, i));
 			EditText et = (EditText) v.findViewById(R.id.edit);
 			mEditTexts[i] = et;
+			mGroup.addView(v);
 		}
 		findViewById(R.id.btn_ok).setOnClickListener(new View.OnClickListener() {
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (checkValid() == CHECK_OK) {
+				int line = checkValid();
+				if (line == CHECK_OK) {
 					dismiss();
 				} else {
-					
+					mEditTexts[line].startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.edit_invalid));
 				}
 			}
 		});
@@ -52,15 +55,25 @@ public class InputDialog extends Dialog {
 			}
 		});
 	}
-	
+
 	private int checkValid() {
-		return CHECK_OK;
+		char[][] board = new char[SIZE][SIZE];
+		for (int i = 0; i < SIZE; i++) {
+			if (mEditTexts[i].getText().length() != SIZE) {
+				return i;
+			}
+			for (int j = 0; j < SIZE; j++) {
+				board[i][j] = mEditTexts[i].getText().charAt(j);
+			}
+		}
+		int line = getInvalidSudokuLine(board);
+		return line;
 	}
-	
-    public boolean isValidSudoku(char[][] board) {
-        // Start typing your Java solution below
-        // DO NOT write main() function
-        int[] row = new int[9];
+
+	public int getInvalidSudokuLine(char[][] board) {
+		// Start typing your Java solution below
+		// DO NOT write main() function
+		int[] row = new int[9];
 		int[] col = new int[9];
 		int[] cell = new int[9];
 		Arrays.fill(row, 0);
@@ -72,19 +85,20 @@ public class InputDialog extends Dialog {
 			int c = y / 3 * 3 + x / 3;
 			if (board[y][x] == '.') {
 			} else if (board[y][x] < '1' || board[y][x] > '9') {
-                return false; 		
+				return y;
 			} else {
 				int t = board[y][x] - '1';
 				t = 1 << t;
-                if ((row[y] & t) != 0 || (col[x] & t) != 0 || (cell[c] & t) != 0) {
-                    return false;
-                }
+				if ((row[y] & t) != 0 || (col[x] & t) != 0
+						|| (cell[c] & t) != 0) {
+					return y;
+				}
 				row[y] |= t;
 				col[x] |= t;
 				cell[c] |= t;
 			}
 		}
-        return true;
-    }
+		return CHECK_OK;
+	}
 
 }
