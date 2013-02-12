@@ -20,6 +20,8 @@ public class InputDialog extends Dialog {
 	private static final int CHECK_UNKNOWN = -2;
 	private LinearLayout mGroup;
 	private EditText[] mEditTexts = new EditText[SIZE];
+	private OnBoardFilledListener mOnBoardFilledListener;
+	private char[][] mBoard;
 
 	public InputDialog(Context context) {
 		super(context);
@@ -30,7 +32,7 @@ public class InputDialog extends Dialog {
 		for (int i = 0; i < SIZE; i ++) {
 			View v = inflater.inflate(R.layout.item_input, null);
 			TextView tv = (TextView) v.findViewById(R.id.label);
-			tv.setText(context.getString(R.string.line, i));
+			tv.setText(context.getString(R.string.line, i + 1));
 			EditText et = (EditText) v.findViewById(R.id.edit);
 			mEditTexts[i] = et;
 			mGroup.addView(v);
@@ -41,6 +43,10 @@ public class InputDialog extends Dialog {
 				// TODO Auto-generated method stub
 				int line = checkValid();
 				if (line == CHECK_OK) {
+					if (mOnBoardFilledListener != null) {
+						mOnBoardFilledListener.onBoardFilled(mBoard);
+					}
+					mOnBoardFilledListener = null;
 					dismiss();
 				} else {
 					mEditTexts[line].startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.edit_invalid));
@@ -57,16 +63,16 @@ public class InputDialog extends Dialog {
 	}
 
 	private int checkValid() {
-		char[][] board = new char[SIZE][SIZE];
+		mBoard = new char[SIZE][SIZE];
 		for (int i = 0; i < SIZE; i++) {
 			if (mEditTexts[i].getText().length() != SIZE) {
 				return i;
 			}
 			for (int j = 0; j < SIZE; j++) {
-				board[i][j] = mEditTexts[i].getText().charAt(j);
+				mBoard[i][j] = mEditTexts[i].getText().charAt(j);
 			}
 		}
-		int line = getInvalidSudokuLine(board);
+		int line = getInvalidSudokuLine(mBoard);
 		return line;
 	}
 
@@ -99,6 +105,15 @@ public class InputDialog extends Dialog {
 			}
 		}
 		return CHECK_OK;
+	}
+	
+	public InputDialog setOnBoardFilledListener(OnBoardFilledListener l) {
+		mOnBoardFilledListener = l;
+		return this;
+	}
+	
+	public interface OnBoardFilledListener {
+		public void onBoardFilled(char[][] board);
 	}
 
 }

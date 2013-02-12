@@ -18,12 +18,13 @@
             android:id="@+id/btn_input"
             style="@style/button_dialog"
             android:onClick="onBtnClick"
-            android:text="" />
+            android:text="@string/input" />
 
         <Button
             android:id="@+id/btn_solve"
             style="@style/button_dialog"
-            android:onClick="onBtnClick" />
+            android:onClick="onBtnClick"
+            android:text="@string/solve" />
     </LinearLayout>
 
 </LinearLayout>

@@ -12,6 +12,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_small</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:maxLength">9</item>
     </style>
 
@@ -21,6 +22,7 @@
         <item name="android:textSize">@dimen/text_small</item>
         <item name="android:inputType">number</item>
         <item name="android:hint">@null</item>
+        <item name="android:text">@string/default_input</item>
     </style>
     
     <style name="button_dialog">
