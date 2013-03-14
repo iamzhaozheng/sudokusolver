@@ -98,15 +98,14 @@ public class WelcomeActivity extends Activity {
 			Imgproc.erode(outerBox, outerBox, kernel);
 			Mat lines = new Mat();
 			Imgproc.HoughLines(outerBox, lines, 1, 3.14159 / 180, 200);
+			double[] top, bottom, left, right;
+			for (int i = 0; i < lines.cols(); i ++) {
+				double[] vec = lines.get(0, i);
+				
+			}
 			for (int i = 0; i < lines.cols(); i++) {
 				double[] vec = lines.get(0, i);
-				double rho = vec[0];
-				double theta = vec[1];
-				double m = -1 / Math.tan(theta);
-				double c = rho / Math.sin(theta);
-				Point start = new Point(0, c);
-				Point end = new Point(outerBox.size().width, m * outerBox.size().width + c);
-				Core.line(outerBox, start, end, new Scalar(255, 0, 0), 3);
+				drawLine(outerBox, vec);
 			}
 			Bitmap bmp = Bitmap.createBitmap((int) mat.size().width,
 					(int) mat.size().height, Config.RGB_565);
@@ -116,5 +115,15 @@ public class WelcomeActivity extends Activity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	private void drawLine(Mat outerBox, double[] vec) {
+		double rho = vec[0];
+		double theta = vec[1];
+		double m = -1 / Math.tan(theta);
+		double c = rho / Math.sin(theta);
+		Point start = new Point(0, c);
+		Point end = new Point(outerBox.size().width, m * outerBox.size().width + c);
+		Core.line(outerBox, start, end, new Scalar(255, 0, 0), 3);
 	}
 }
